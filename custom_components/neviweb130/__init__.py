@@ -6,6 +6,8 @@ import asyncio
 import json
 import logging
 import os
+import threading
+import time
 from typing import Any
 
 import aiohttp
@@ -151,6 +153,8 @@ from .const import (
     CONF_ACCOUNTS,
     CONF_HOMEKIT_MODE,
     CONF_IGNORE_MIWI,
+    CONF_LIGHT_POLL,
+    CONF_SESSION_LIFETIME,
     CONF_LOCATION,
     CONF_LOCATION2,
     CONF_LOCATION3,
@@ -194,9 +198,11 @@ NEVIWEB_WEATHER = f"{HOST}/api/weather?code="
 
 HOMEKIT_MODE = DEFAULT_HOMEKIT_MODE
 IGNORE_MIWI = DEFAULT_IGNORE_MIWI
+LIGHT_POLL = False
 NOTIFY = DEFAULT_NOTIFY
 SAFE_MODE = DEFAULT_SAFE_MODE
 SCAN_INTERVAL = DEFAULT_SCAN_INTERVAL
+SESSION_LIFETIME = timedelta(hours=24)
 STAT_INTERVAL = DEFAULT_STAT_INTERVAL
 
 
@@ -287,6 +293,17 @@ def setup(hass: HomeAssistant, hass_config: dict[str, Any]) -> bool:
     global STAT_INTERVAL
     STAT_INTERVAL = hass_config[DOMAIN].get(CONF_STAT_INTERVAL, DEFAULT_STAT_INTERVAL)
     _LOGGER.debug("Setting stat interval to: %s", STAT_INTERVAL)
+
+    global LIGHT_POLL
+    LIGHT_POLL = hass_config[DOMAIN].get(CONF_LIGHT_POLL, False)
+    hass.data[DOMAIN]["light_poll"] = LIGHT_POLL
+    _LOGGER.debug("Setting light poll mode to: %s", LIGHT_POLL)
+
+    global SESSION_LIFETIME
+    SESSION_LIFETIME = hass_config[DOMAIN].get(
+        CONF_SESSION_LIFETIME, timedelta(hours=24)
+    )
+    _LOGGER.debug("Setting session lifetime to: %s", SESSION_LIFETIME)
 
     global NOTIFY
     NOTIFY = hass_config[DOMAIN].get(CONF_NOTIFY, DEFAULT_NOTIFY)
@@ -489,6 +506,8 @@ class Neviweb130Client:
         self._timeout = timeout
         self._occupancyMode = None
         self.user = None
+        self._session_created: float | None = None
+        self._session_lock = threading.Lock()
 
         self.__post_login_page()
         self.__get_network()
@@ -652,6 +671,7 @@ class Neviweb130Client:
         self.user = data["user"]
         self._headers = {"Session-Id": data["session"]}
         self._account = str(data["account"]["id"])
+        self._session_created = time.time()
         _LOGGER.debug("Successfully logged in to: %s", self._account)
 
     def __get_network(self) -> None:
@@ -964,8 +984,33 @@ class Neviweb130Client:
                         )
                     )
 
+    def _check_session_lifetime(self) -> None:
+        """Re-login once the session is older than the configured lifetime.
+
+        Neviweb appears to demote long-lived API sessions to read-only
+        (SVCUNAUTH on all attribute writes, see issue #515). Renewing the
+        session keeps it fresh.
+        """
+        if SESSION_LIFETIME is None or self._session_created is None:
+            return
+        if time.time() - self._session_created < SESSION_LIFETIME.total_seconds():
+            return
+        with self._session_lock:
+            if (
+                self._session_created is None
+                or time.time() - self._session_created < SESSION_LIFETIME.total_seconds()
+            ):
+                return
+            _LOGGER.warning(
+                "Session older than %s, renewing Neviweb session",
+                SESSION_LIFETIME,
+            )
+            self.__post_login_page()
+            self._session_created = time.time()
+
     def get_device_attributes(self, device_id: str, attributes: list[str]) -> dict[str, Any]:
         """Get device attributes."""
+        self._check_session_lifetime()
         increment_request_counter(self.hass)
         # Http requests
         try:

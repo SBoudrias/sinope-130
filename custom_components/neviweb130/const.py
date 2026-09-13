@@ -37,6 +37,8 @@ Sélectionner l’entité Update → ⚙️ → désactiver “Visible”.
 
 CONF_ACCOUNTS = "accounts"
 CONF_HOMEKIT_MODE = "homekit_mode"
+CONF_LIGHT_POLL = "light_poll"
+CONF_SESSION_LIFETIME = "session_lifetime"
 CONF_IGNORE_MIWI = "ignore_miwi"
 CONF_LOCATION = "location"
 CONF_LOCATION2 = "location2"
@@ -50,6 +52,18 @@ CONF_SAFE_MODE = "safe_mode"
 CONF_STAT_INTERVAL = "stat_interval"
 
 ATTR_ACCESSORY_TYPE = "accessoryType"
+
+# Essential attributes polled in light_poll mode (#515): keeps the climate
+# entity functional (current temp, setpoint, mode, limits) while shrinking
+# each poll payload from ~28 attributes to 5. Stats, weather, sensor-error
+# and location-status requests are skipped entirely in that mode.
+LIGHT_POLL_ATTRIBUTES = [
+    "roomSetpoint",
+    "roomSetpointMax",
+    "roomSetpointMin",
+    "roomTemperature",
+    "systemMode",
+]
 ATTR_ACTIVE = "active"
 ATTR_AIR_ACTIVATION_TEMP = "airCurtainActivationTemperature"
 ATTR_AIR_CONFIG = "airCurtainConfig"

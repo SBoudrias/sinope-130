@@ -84,6 +84,7 @@ from . import HOMEKIT_MODE, NOTIFY
 from . import SCAN_INTERVAL as scan_interval
 from . import STAT_INTERVAL
 from .const import (
+    LIGHT_POLL_ATTRIBUTES,
     ATTR_ACCESSORY_TYPE,
     ATTR_ACTIVE,
     ATTR_AIR_ACTIVATION_TEMP,
@@ -3947,9 +3948,48 @@ class Neviweb130LowThermostat(Neviweb130Thermostat):
         self._load2 = 0
         self._pump_protec_period_status = "off"
 
+    def _update_light(self) -> None:
+        """Lightweight update (#515).
+
+        Poll only the essential attributes and skip the per-device
+        location-status, stats, sensor-error and weather requests.
+        Keeps the climate entity functional while cutting both the
+        request count and the response payload size by roughly 5x.
+        Extra state attributes are left at their last known values.
+        """
+        start = time.time()
+        device_data = self._client.get_device_attributes(self._id, LIGHT_POLL_ATTRIBUTES)
+        _LOGGER.debug(
+            "Light updating %s (%s sec): %s",
+            self._name,
+            round(time.time() - start, 3),
+            device_data,
+        )
+        if "error" in device_data:
+            self.log_error(device_data["error"]["code"])
+            return
+        if "errorCode" in device_data:
+            _LOGGER.warning("Error updating device %s: (%s)", self._name, device_data)
+            return
+        room_temp = device_data.get(ATTR_ROOM_TEMPERATURE)
+        if isinstance(room_temp, dict) and room_temp.get("value") is not None:
+            self._cur_temp_before = self._cur_temp
+            self._cur_temp = float(room_temp["value"])
+        if device_data.get(ATTR_ROOM_SETPOINT) is not None:
+            self._target_temp = float(device_data[ATTR_ROOM_SETPOINT])
+        if device_data.get(ATTR_ROOM_SETPOINT_MIN) is not None:
+            self._min_temp = device_data[ATTR_ROOM_SETPOINT_MIN]
+        if device_data.get(ATTR_ROOM_SETPOINT_MAX) is not None:
+            self._max_temp = device_data[ATTR_ROOM_SETPOINT_MAX]
+        if device_data.get(ATTR_SYSTEM_MODE):
+            self._operation_mode = device_data[ATTR_SYSTEM_MODE]
+
     @override
     def update(self) -> None:
         if self._active:
+            if self.hass.data[DOMAIN].get("light_poll", False):
+                self._update_light()
+                return
             LOW_VOLTAGE_ATTRIBUTES = [
                 ATTR_ROOM_TEMP_DISPLAY,
                 ATTR_KEYPAD,

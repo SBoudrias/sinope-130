@@ -101,6 +101,8 @@ from .const import (
     CONF_ACCOUNTS,
     CONF_HOMEKIT_MODE,
     CONF_IGNORE_MIWI,
+    CONF_LIGHT_POLL,
+    CONF_SESSION_LIFETIME,
     CONF_LOCATION,
     CONF_LOCATION2,
     CONF_LOCATION3,
@@ -320,6 +322,13 @@ CONFIG_SCHEMA = vol.Schema(
                 vol.Optional(CONF_SCAN_INTERVAL, default=SCAN_INTERVAL): cv.time_period,
                 vol.Optional(CONF_HOMEKIT_MODE, default=HOMEKIT_MODE): cv.boolean,
                 vol.Optional(CONF_IGNORE_MIWI, default=IGNORE_MIWI): cv.boolean,
+                # Experimental (#515): poll only essential attributes and skip
+                # stats/weather/location requests; renew the Neviweb session
+                # when it gets older than this lifetime.
+                vol.Optional(CONF_LIGHT_POLL, default=False): cv.boolean,
+                vol.Optional(
+                    CONF_SESSION_LIFETIME, default=timedelta(hours=24)
+                ): cv.time_period,
                 vol.Optional(CONF_STAT_INTERVAL, default=STAT_INTERVAL): vol.All(
                     vol.Coerce(int), vol.Range(min=300, max=1800)
                 ),
