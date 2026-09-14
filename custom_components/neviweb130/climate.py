@@ -899,7 +899,7 @@ async def async_setup_platform(
         """Set to outside or setpoint temperature display for Wi-Fi thermostats."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "display": service.data[ATTR_DISPLAY2],
         }
         thermostat.set_second_display(value)
@@ -909,7 +909,7 @@ async def async_setup_platform(
         """Set backlight always on or auto."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "level": service.data[ATTR_BACKLIGHT],
         }
         thermostat.set_backlight(value)
@@ -919,7 +919,7 @@ async def async_setup_platform(
         """Lock/unlock keypad device."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "lock": service.data[ATTR_KEYPAD],
         }
         thermostat.set_keypad_lock(value)
@@ -963,7 +963,7 @@ async def async_setup_platform(
             )
 
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             ATTR_TIME: service.data[ATTR_TIME_FORMAT],
         }
         thermostat.set_time_format(value)
@@ -973,7 +973,7 @@ async def async_setup_platform(
         """Set temperature format, celsius or fahrenheit."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_TEMP],
         }
         thermostat.set_temperature_format(value)
@@ -983,7 +983,7 @@ async def async_setup_platform(
         """Set maximum setpoint for device."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_ROOM_SETPOINT_MAX],
         }
         thermostat.set_setpoint_max(value)
@@ -993,7 +993,7 @@ async def async_setup_platform(
         """Set minimum setpoint for device."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_ROOM_SETPOINT_MIN],
         }
         thermostat.set_setpoint_min(value)
@@ -1003,7 +1003,7 @@ async def async_setup_platform(
         """Set minimum setpoint for device."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_FLOOR_AIR_LIMIT],
         }
         thermostat.set_floor_air_limit(value)
@@ -1013,7 +1013,7 @@ async def async_setup_platform(
         """Set early heating on/off for Wi-Fi thermostat."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "start": service.data[ATTR_EARLY_START],
         }
         thermostat.set_early_start(value)
@@ -1023,7 +1023,7 @@ async def async_setup_platform(
         """Switch between ambient or floor temperature sensor."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "mode": service.data[ATTR_FLOOR_MODE],
         }
         thermostat.set_air_floor_mode(value)
@@ -1034,14 +1034,14 @@ async def async_setup_platform(
         thermostat = get_thermostat(service)
         if not isinstance(thermostat, Neviweb130HeatCoolThermostat):
             value = {
-                "id": thermostat.unique_id,
+                "id": thermostat._id,
                 "dractive": service.data(ATTR_DRACTIVE),
                 "optout": service.data(ATTR_OPTOUT),
                 "setpoint": service.data(ATTR_SETPOINT),
             }
         else:
             value = {
-                "id": thermostat.unique_id,
+                "id": thermostat._id,
                 ATTR_AUX_OPTIM: service.data.get(ATTR_AUX_OPTIM),
                 ATTR_FAN_SPEED_OPTIM: service.data.get(ATTR_FAN_SPEED_OPTIM),
             }
@@ -1052,7 +1052,7 @@ async def async_setup_platform(
         """Set options for hvac dr setpoint in Eco Sinope."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "status": service.data[ATTR_STATUS],
             "val": service.data[ATTR_VALUE],
         }
@@ -1063,7 +1063,7 @@ async def async_setup_platform(
         """Set options for auxiliary heating."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "status": service.data[ATTR_STATUS],
             "val": service.data[ATTR_VALUE],
         }
@@ -1084,7 +1084,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "val": val,
         }
         thermostat.set_aux_cycle_output(value)
@@ -1094,7 +1094,7 @@ async def async_setup_platform(
         """Set options for main cycle length for low voltage thermostats."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "val": service.data[ATTR_VALUE],
         }
         thermostat.set_cycle_output(value)
@@ -1104,7 +1104,7 @@ async def async_setup_platform(
         """Set status of pump protection for low voltage thermostats."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "status": service.data[ATTR_STATUS],
         }
         thermostat.set_pump_protection(value)
@@ -1114,7 +1114,7 @@ async def async_setup_platform(
         """Set maximum cooling setpoint for device."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_COOL_SETPOINT_MAX],
         }
         thermostat.set_cool_setpoint_max(value)
@@ -1124,7 +1124,7 @@ async def async_setup_platform(
         """Set minimum cooling setpoint for device."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_COOL_SETPOINT_MIN],
         }
         thermostat.set_cool_setpoint_min(value)
@@ -1134,7 +1134,7 @@ async def async_setup_platform(
         """Set away heating setpoint."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_ROOM_SETPOINT_AWAY],
         }
         thermostat.set_room_setpoint_away(value)
@@ -1154,7 +1154,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_COOL_SETPOINT_AWAY],
         }
         thermostat.set_cool_setpoint_away(value)
@@ -1164,7 +1164,7 @@ async def async_setup_platform(
         """Set maximum floor heating limit for floor device."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "level": service.data[ATTR_FLOOR_MAX],
             "limit": "high",
         }
@@ -1175,7 +1175,7 @@ async def async_setup_platform(
         """Set minimum floor heating limit for floor device."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "level": service.data[ATTR_FLOOR_MIN],
             "limit": "low",
         }
@@ -1186,7 +1186,7 @@ async def async_setup_platform(
         """Activate or deactivate Neviweb polling for missing device."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "active": service.data[ATTR_ACTIVE],
         }
         thermostat.set_activation(value)
@@ -1196,7 +1196,7 @@ async def async_setup_platform(
         """Set floor sensor type."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "type": service.data[ATTR_FLOOR_SENSOR],
         }
         thermostat.set_sensor_type(value)
@@ -1215,7 +1215,7 @@ async def async_setup_platform(
         """Set minimum temperature for heat pump device operation."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_BALANCE_PT],
         }
         thermostat.set_heat_pump_operation_limit(value)
@@ -1235,7 +1235,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             ATTR_TYPE: service.data[ATTR_TYPE],
         }
         thermostat.set_heat_installation_type(value)
@@ -1247,7 +1247,7 @@ async def async_setup_platform(
         thermostat = get_thermostat(service)
         temp = service.data.get(ATTR_HEAT_LOCK_TEMP) or service.data.get(ATTR_HEAT_LOCKOUT_TEMP)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": temp,
         }
         thermostat.set_heat_lockout_temperature(value)
@@ -1257,7 +1257,7 @@ async def async_setup_platform(
         """Set minimum outside temperature limit to allow cooling device operation."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_COOL_LOCK_TEMP],
         }
         thermostat.set_cool_lockout_temperature(value)
@@ -1267,7 +1267,7 @@ async def async_setup_platform(
         """Set display on/off for heat pump."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "display": service.data[ATTR_DISPLAY_CONF],
         }
         thermostat.set_display_config(value)
@@ -1277,7 +1277,7 @@ async def async_setup_platform(
         """Set sound on/off for heat pump."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "sound": service.data[ATTR_SOUND_CONF],
         }
         thermostat.set_sound_config(value)
@@ -1287,7 +1287,7 @@ async def async_setup_platform(
         """Set second display for TH1134ZB-HC thermostat."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "display": service.data[ATTR_DISPLAY2],
         }
         thermostat.set_hc_second_display(value)
@@ -1297,7 +1297,7 @@ async def async_setup_platform(
         """Set display language for TH1134ZB-HC thermostat."""
         thermostat = get_thermostat(service)
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "lang": service.data[ATTR_LANGUAGE],
         }
         thermostat.set_language(value)
@@ -1419,7 +1419,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "type": service.data[ATTR_ACCESSORY_TYPE],
         }
         thermostat.set_accessory_type(value)
@@ -1439,7 +1439,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "mode": service.data[ATTR_SETPOINT_MODE],
         }
         thermostat.set_schedule_mode(value)
@@ -1459,7 +1459,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "level": service.data[ATTR_HEATCOOL_SETPOINT_MIN_DELTA],
         }
         thermostat.set_heatcool_setpoint_delta(value)
@@ -1479,7 +1479,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "month": service.data[ATTR_FAN_FILTER_REMAIN],
         }
         thermostat.set_fan_filter_reminder(value)
@@ -1499,7 +1499,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "temp": service.data[ATTR_TEMP_OFFSET_HEAT],
         }
         thermostat.set_temperature_offset(value)
@@ -1519,7 +1519,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             ATTR_AUX_HEAT_SOURCE_TYPE: service.data[ATTR_AUX_HEAT_SOURCE_TYPE],
         }
         thermostat.set_aux_heating_source(value)
@@ -1539,7 +1539,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "speed": service.data[ATTR_FAN_SPEED],
         }
         thermostat.set_fan_speed(value)
@@ -1559,7 +1559,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             "mode": service.data[ATTR_HUMIDITY_SETPOINT_MODE],
         }
         thermostat.set_humidity_mode(value)
@@ -1579,7 +1579,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             ATTR_TIME: service.data[ATTR_TIME] * 60,
         }
         thermostat.set_heat_dissipation_time(value)
@@ -1599,7 +1599,7 @@ async def async_setup_platform(
                 )
             )
         value = {
-            "id": thermostat.unique_id,
+            "id": thermostat._id,
             ATTR_TIME: service.data[ATTR_TIME] * 60,
         }
         thermostat.set_cool_dissipation_time(value)
@@ -1610,7 +1610,7 @@ async def async_setup_platform(
         entity_id = service.data[ATTR_ENTITY_ID]
         for thermostat in entities:
             if thermostat.entity_id == entity_id:
-                value = {"id": thermostat.unique_id, "mode": service.data[ATTR_MODE]}
+                value = {"id": thermostat._id, "mode": service.data[ATTR_MODE]}
                 thermostat.set_climate_neviweb_status(value)
                 thermostat.schedule_update_ha_state(True)
                 break
@@ -7254,28 +7254,28 @@ class Neviweb130HeatCoolThermostat(Neviweb130Thermostat):
         air_ex_min_time_on = value.get(ATTR_AIR_EX_MIN_TIME_ON)
 
         if heat_min_time_on is not None:
-            self._client.set_heat_min_time_on(self.unique_id, heat_min_time_on)
+            self._client.set_heat_min_time_on(self._id, heat_min_time_on)
             self._heat_min_time_on = heat_min_time_on
         if cool_min_time_on is not None:
-            self._client.set_cool_min_time_on(self.unique_id, cool_min_time_on)
+            self._client.set_cool_min_time_on(self._id, cool_min_time_on)
             self._cool_min_time_on = cool_min_time_on
         if aux_heat_min_time_on is not None:
-            self._client.set_aux_heat_min_time_on(self.unique_id, aux_heat_min_time_on)
+            self._client.set_aux_heat_min_time_on(self._id, aux_heat_min_time_on)
             self._aux_heat_min_time_on = aux_heat_min_time_on
         if air_ex_min_time_on is not None:
-            self._client.set_air_ex_min_time_on(self.unique_id, air_ex_min_time_on)
+            self._client.set_air_ex_min_time_on(self._id, air_ex_min_time_on)
             self._air_ex_min_time_on = air_ex_min_time_on
 
     def set_heat_installation_type(self, value):
         """Set minimum time the device is on before letting be off again (run-on time)"""
         type_val = value[ATTR_TYPE]
-        self._client.set_heat_installation_type(self.unique_id, type_val)
+        self._client.set_heat_installation_type(self._id, type_val)
         self._heat_installation_type = type_val
 
     def set_reversing_valve_polarity(self, value):
         """Set minimum time the device is on before letting be off again (run-on time)"""
         polarity = value[ATTR_POLARITY]
-        self._client.set_reversing_valve_polarity(self.unique_id, polarity)
+        self._client.set_reversing_valve_polarity(self._id, polarity)
         self._reversing_valve_polarity = polarity
 
     def set_min_time_off(self, value):
@@ -7285,13 +7285,13 @@ class Neviweb130HeatCoolThermostat(Neviweb130Thermostat):
         aux_heat_min_time_off = value.get(ATTR_AUX_HEAT_MIN_TIME_OFF)
 
         if heat_min_time_off is not None:
-            self._client.set_heat_min_time_off(self.unique_id, heat_min_time_off)
+            self._client.set_heat_min_time_off(self._id, heat_min_time_off)
             self._heat_min_time_off = heat_min_time_off
         if cool_min_time_off is not None:
-            self._client.set_cool_min_time_off(self.unique_id, cool_min_time_off)
+            self._client.set_cool_min_time_off(self._id, cool_min_time_off)
             self._cool_min_time_off = cool_min_time_off
         if aux_heat_min_time_off is not None:
-            self._client.set_aux_heat_min_time_off(self.unique_id, aux_heat_min_time_off)
+            self._client.set_aux_heat_min_time_off(self._id, aux_heat_min_time_off)
             self._aux_heat_min_time_off = aux_heat_min_time_off
 
     def set_heat_interstage_delay(self, value):
@@ -7331,11 +7331,11 @@ class Neviweb130HeatCoolThermostat(Neviweb130Thermostat):
             )
 
         if has_multiple_hp_heat_stages:
-            self._client.set_heat_interstage_min_delay(self.unique_id, time_val * 60)
-            self._client.set_heat_interstage_delay(self.unique_id, time_val * 60 * 2)
+            self._client.set_heat_interstage_min_delay(self._id, time_val * 60)
+            self._client.set_heat_interstage_delay(self._id, time_val * 60 * 2)
         if has_multiple_aux_stages:
-            self._client.set_aux_interstage_min_delay(self.unique_id, time_val * 60)
-            self._client.set_aux_interstage_delay(self.unique_id, time_val * 60 * 2)
+            self._client.set_aux_interstage_min_delay(self._id, time_val * 60)
+            self._client.set_aux_interstage_delay(self._id, time_val * 60 * 2)
 
     def set_cool_interstage_delay(self, value):
         try:
@@ -7372,8 +7372,8 @@ class Neviweb130HeatCoolThermostat(Neviweb130Thermostat):
                 )
             )
 
-        self._client.set_cool_interstage_min_delay(self.unique_id, time_val * 60)
-        self._client.set_cool_interstage_delay(self.unique_id, time_val * 60 * 2)
+        self._client.set_cool_interstage_min_delay(self._id, time_val * 60)
+        self._client.set_cool_interstage_delay(self._id, time_val * 60 * 2)
 
     def set_aux_heat_start_delay(self, value):
         try:
@@ -7412,7 +7412,7 @@ class Neviweb130HeatCoolThermostat(Neviweb130Thermostat):
                 )
             )
 
-        self._client.set_aux_heat_start_delay(self.unique_id, time_val)
+        self._client.set_aux_heat_start_delay(self._id, time_val)
 
     def set_aux_heating_source(self, value):
         """Set auxiliary heating device."""
